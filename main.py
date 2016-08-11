@@ -51,9 +51,15 @@ def getContent(num):
     print ip_list
     '''
 
-    result=et.xpath('//tr[]/')
-    print result
-
+    result_even=et.xpath('//tr[@class=""]')
+    result_odd=et.xpath('//tr[@class="odd"]')
+    #print result
+    for i in result_even:
+      print i.xpath("./td/text()")[:2]
+      print "*"*20
+    for i in result_odd:
+      print i.xpath("./td/text()")[:2]
+      print "*"*20
 if __name__=="__main__":
     now=datetime.datetime.now()
     print "Start at %s" %now
