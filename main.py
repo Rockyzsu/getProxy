@@ -59,6 +59,10 @@ class getProxy():
         for i in range(1,page):
             self.getContent(i)
 
+    #查看爬到的代理IP是否还能用
+    def isAlive(self,ip,port):
+        req=urllib2.Request()
+
 
 if __name__ == "__main__":
     now = datetime.datetime.now()
