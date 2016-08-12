@@ -27,11 +27,14 @@ class getProxy():
         for i in result_even:
             t1 = i.xpath("./td/text()")[:2]
             print "IP:%s\tPort:%s" % (t1[0], t1[1])
-            self.insert_db(self.now,t1[0],t1[1])
+            if self.isAlive(t1[0], t1[1]):
+
+                self.insert_db(self.now,t1[0],t1[1])
         for i in result_odd:
             t2 = i.xpath("./td/text()")[:2]
             print "IP:%s\tPort:%s" % (t2[0], t2[1])
-            self.insert_db(self.now,t2[0],t2[1])
+            if self.isAlive(t2[0], t2[1]):
+                self.insert_db(self.now,t2[0],t2[1])
 
 
     def insert_db(self,date,ip,port):
@@ -61,7 +64,29 @@ class getProxy():
 
     #查看爬到的代理IP是否还能用
     def isAlive(self,ip,port):
-        req=urllib2.Request()
+        proxy={'http':ip+':'+port}
+        print proxy
+
+        #使用这个方式是全局方法。
+        proxy_support=urllib2.ProxyHandler(proxy)
+        opener=urllib2.build_opener(proxy_support)
+        urllib2.install_opener(opener)
+        #使用代理访问腾讯官网，进行验证代理是否有效
+        test_url="http://www.qq.com"
+        req=urllib2.Request(test_url,headers=self.header)
+        try:
+            #timeout 设置为10，如果你不能忍受你的代理延时超过10，就修改timeout的数字
+            resp=urllib2.urlopen(req,timeout=10)
+
+            if resp.code==200:
+                print "work"
+                return True
+            else:
+                print "not work"
+                return False
+        except :
+            print "Not work"
+            return False
 
 
 if __name__ == "__main__":
