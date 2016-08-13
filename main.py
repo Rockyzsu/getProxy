@@ -58,7 +58,7 @@ class getProxy():
         conn.commit()
         conn.close()
 
-    def loop(self,page):
+    def loop(self,page=5):
         for i in range(1,page):
             self.getContent(i)
 
@@ -88,10 +88,29 @@ class getProxy():
             print "Not work"
             return False
 
+    #查看数据库里面的数据时候还有效，没有的话将其纪录删除
+    def check_db_pool(self):
+        conn=sqlite3.connect(self.dbname)
+        query_cmd='''
+        select IP,PORT from PROXY;
+        '''
+        cursor=conn.execute(query_cmd)
+        for row in cursor:
+            if not self.isAlive(row[0],row[1]):
+                #代理失效， 要从数据库从删除
+                delete_cmd='''
+                delete from PROXY where IP='%s'
+                ''' %row[0]
+                print "delete IP %s in db" %row[0]
+                conn.execute(delete_cmd)
+                conn.commit()
+
+        conn.close()
+
 
 if __name__ == "__main__":
     now = datetime.datetime.now()
     print "Start at %s" % now
     obj=getProxy()
     obj.loop(5)
-
+    obj.check_db_pool()
