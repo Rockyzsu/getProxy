@@ -197,7 +197,7 @@ class getProxy():
         fp=open('proxy.cfg','a')
 
         try:
-            s=requests.get(url='https://guyuan.anjuke.com/community/p1/',headers=self.header,proxies=proxies,timeout=10)
+            s=requests.get(url='https://m.lianjia.com/',headers=self.header,proxies=proxies,timeout=10)
             print s.status_code
             if s.status_code==200:
                 print str(proxies)
