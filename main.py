@@ -1,9 +1,8 @@
 # -*- coding=utf-8 -*-
+__author__ = 'Rocky'
 import re
-
 import requests
 from lxml import etree
-__author__ = 'Rocky'
 import urllib2, time, datetime
 from lxml import etree
 import sqlite3,time
@@ -45,8 +44,6 @@ class getProxy():
                 proxies = {'https': 'https://' + t2[0] + ':' + t2[1]}
                 self.check_Proxy_IP(proxies)
 
-
-
     def insert_db(self,date,ip,port):
         dbname=self.dbname
         try:
@@ -77,7 +74,8 @@ class getProxy():
         proxy={'http':ip+':'+port}
         #print proxy
 
-        #使用这个方式是全局方法。
+        #使用这个方式是全局方法。不推荐
+        '''
         proxy_support=urllib2.ProxyHandler(proxy)
         opener=urllib2.build_opener(proxy_support)
         urllib2.install_opener(opener)
@@ -98,6 +96,18 @@ class getProxy():
         except :
             #print "Not work"
             return False
+        '''
+        testUrl='members.3322.org/dyndns/getip'
+        r=requests.get(url=testUrl,headers=self.header,proxies=proxy)
+        code= r.status_code
+        print r.text
+        print code
+        if  code==200:
+            print "Proxy ", proxy,'works'
+            return True
+        else:
+            return False
+
 
     #查看数据库里面的数据时候还有效，没有的话将其纪录删除
     def check_db_pool(self):
