@@ -163,7 +163,7 @@ class getProxy():
     def getFrom_89vip(self):
         url='http://www.89ip.cn/tiqv.php?sxb=&tqsl=30&ports=&ktip=&xl=on&submit=%CC%E1++%C8%A1'
         s=requests.get(url,headers=self.header)
-        print s.status_code
+        #print s.status_code
         #print s.text
         res=re.findall('<BR>(.*?)<BR>',s.text)
 
@@ -171,7 +171,7 @@ class getProxy():
 
             #print i
             proxies={'http':'http://'+str(i)}
-            print proxies
+            #print proxies
             self.check_Proxy_IP(proxies)
 
     def apiDemo(self):
@@ -205,28 +205,23 @@ class getProxy():
         #proxies={'http': '180.105.126.75:8118'}
         #proxies={'https': 'https://112.246.37.48:8118',}
         fp=open('proxy.cfg','a')
-
+        #print proxies
         try:
-            s=requests.get(url='https://m.lianjia.com/',headers=self.header,proxies=proxies,timeout=10)
+
+            s=requests.get(url='http://members.3322.org/dyndns/getip',headers=self.header,proxies=proxies,timeout=10)
+            #s=requests.get(url='http://members.3322.org/dyndns/getip',headers=self.header,timeout=10)
+            print s.text
             print s.status_code
             if s.status_code==200:
-                print str(proxies)
+                #print str(proxies)
+                print proxies
+                print 'work'
                 fp.write(str(proxies))
                 fp.write('\n')
                 fp.close()
-            content=s.text
 
-            p = re.compile(u'请输入图片中的验证码')
-            if p.findall(content):
-                print "需要手动输入验证码"
-                return 404
         except Exception,e:
             print e
-
-        #s=requests.get(url='http://ip.chinaz.com/',headers=self.header)
-        #x=etree.HTML(s.text)
-        #l=x.xpath('.//p[@class="getlist pl10"]/text()')
-        #print l
 
 
 if __name__ == "__main__":
@@ -234,8 +229,9 @@ if __name__ == "__main__":
     print "Start at %s" % now
 
     obj=getProxy()
-    #obj.getFrom_89vip()
-    obj.getHTTPS()
+    #obj.check_Proxy_IP('')
+    obj.getFrom_89vip()
+    #obj.getHTTPS()
     #obj.validation()
     #obj.apiDemo()
     #obj.loop()
